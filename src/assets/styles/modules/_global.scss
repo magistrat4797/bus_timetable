@@ -1,0 +1,21 @@
+$base-font-size: 16px;
+$base-font-weight: 400;
+
+html {
+    font-weight: $base-font-weight;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    height: 100%;
+}
+
+body {
+    @apply m-0 min-h-full overflow-x-hidden font-sans;
+}
+
+p {
+    @apply mb-4 md:mb-6;
+}
+
+a.inline-link {
+    @apply ease-in-out duration-300 underline;
+}
