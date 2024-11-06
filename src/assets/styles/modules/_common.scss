@@ -1,0 +1,14 @@
+html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    @apply h-full;
+}
+
+body {
+    @apply m-0 min-h-full overflow-x-hidden font-sans bg-gray-lightest text-black;
+}
+
+a,
+button {
+    @apply transition ease-in-out duration-300;
+}
