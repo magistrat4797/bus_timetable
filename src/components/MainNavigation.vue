@@ -19,13 +19,13 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps, ref, computed, onMounted, nextTick, watch } from 'vue';
+import { ref, computed, onMounted, nextTick, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import BaseCard from '@/components/BaseCard.vue';
 
-defineProps<{
-    links: { name: string; label: string }[];
-}>();
+type NavLink = { name: string; label: string };
+
+defineProps<{ links: NavLink[] }>();
 
 const indicatorWidth = ref(0);
 const indicatorOffset = ref(0);

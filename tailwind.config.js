@@ -23,7 +23,10 @@ export default {
             },
             height: {
                 nav: '60px',
-                'nav-desktop': '64px'
+                'nav-desktop': '64px',
+                placeholder: '268px',
+                'placeholder-tablet': '330px',
+                'placeholder-desktop': '444px'
             }
         },
         fontFamily: {

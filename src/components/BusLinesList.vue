@@ -4,15 +4,24 @@
             <h2>Select Bus Line</h2>
         </template>
         <div class="bus-lines-list flex flex-wrap gap-2">
-            <div class="bus-line active">100</div>
-            <div class="bus-line">101</div>
-            <div class="bus-line">102</div>
+            <div
+                v-for="line in allLines"
+                :key="line"
+                class="bus-line"
+                :class="{ active: line === selectedLineNumber }"
+                @click="selectLine(line)"
+            >
+                {{ line }}
+            </div>
         </div>
     </BaseCard>
 </template>
 
 <script lang="ts" setup>
+import { useBusStore } from '@/composables/useBusStore';
 import BaseCard from '@/components/BaseCard.vue';
+
+const { allLines, selectedLineNumber, selectLine } = useBusStore();
 </script>
 
 <style lang="scss" scoped>
