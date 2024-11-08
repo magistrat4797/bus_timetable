@@ -1,35 +1,33 @@
 <template>
     <MainContainer>
-        <div v-if="isLoading" class="loader">Loading...</div>
-        <div v-else>
+        <template v-if="isLoading || error">
+            <div class="mb-4">
+                <template v-if="isLoading">
+                    <div class="flex items-center justify-center min-h-[60px]">
+                        <TheLoader />
+                    </div>
+                </template>
+                <template v-if="error">
+                    <p class="error-message">{{ error }}</p>
+                </template>
+            </div>
+        </template>
+        <template v-else>
             <BusLinesList />
             <div class="flex flex-col md:flex-row gap-4">
                 <ThePlaceholder class="md:w-1/2" type="stops" />
                 <ThePlaceholder class="md:w-1/2" type="times" />
             </div>
-        </div>
+        </template>
     </MainContainer>
 </template>
 
 <script lang="ts" setup>
-import { onMounted } from 'vue';
 import { useBusStore } from '@/composables/useBusStore';
 import MainContainer from '@/components/MainContainer.vue';
 import ThePlaceholder from '@/components/ThePlaceholder.vue';
+import TheLoader from '@/components/common/TheLoader.vue';
 import BusLinesList from '@/components/BusLinesList.vue';
 
-const { loadLines, isLoading } = useBusStore();
-
-onMounted(() => {
-    loadLines();
-});
+const { isLoading, error } = useBusStore();
 </script>
-
-<style scoped>
-.loader {
-    text-align: center;
-    font-size: 1.5em;
-    color: #333;
-    margin: 20px 0;
-}
-</style>

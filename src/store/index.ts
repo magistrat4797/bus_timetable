@@ -9,7 +9,8 @@ export default createStore<StateInterface>({
         selectedLineStops: [],
         selectedLineNumber: null,
         selectedStopName: null,
-        isLoading: false
+        isLoading: false,
+        error: null
     },
     getters: {
         allLines(state): number[] {
@@ -42,6 +43,9 @@ export default createStore<StateInterface>({
         },
         isLoading(state): boolean {
             return state.isLoading;
+        },
+        error(state): string | null {
+            return state.error;
         }
     },
     mutations: {
@@ -63,6 +67,9 @@ export default createStore<StateInterface>({
         setLoading(state, isLoading: boolean) {
             state.isLoading = isLoading;
         },
+        setError(state, error: string | null) {
+            state.error = error;
+        },
         resetSelection(state) {
             state.selectedStopName = null;
         }
@@ -72,6 +79,7 @@ export default createStore<StateInterface>({
             if (state.stops.length > 0) return;
 
             commit('setLoading', true);
+            commit('setError', null);
 
             try {
                 const response = await axios.get<StopInterface[]>('http://localhost:3000/stops');
@@ -80,20 +88,17 @@ export default createStore<StateInterface>({
                 commit('setLines', lines);
                 commit('setStops', stopsData);
             } catch (error) {
-                console.error('Błąd podczas pobierania danych z API:', error);
+                console.error('Error fetching data from API:', error);
+                commit('setError', 'Failed to load data. Please try again later.');
             } finally {
                 commit('setLoading', false);
             }
         },
         loadStopsForLine({ commit, state }, line: number) {
-            commit('setLoading', true);
-
             const stopsData = state.stops
                 .filter((stop) => stop.line === line)
                 .sort((a, b) => a.stop.localeCompare(b.stop));
             commit('setSelectedLineStops', stopsData);
-
-            commit('setLoading', false);
         },
         selectLine({ commit, dispatch, state }, line: number) {
             if (state.selectedLineNumber === line) {

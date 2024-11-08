@@ -12,4 +12,5 @@ export interface StateInterface {
     selectedLineNumber: number | null;
     selectedStopName: string | null;
     isLoading: boolean;
+    error: string | null;
 }

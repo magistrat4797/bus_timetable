@@ -1,5 +1,5 @@
 <template>
-    <BaseCard class="p-4 md:p-6 mb-4">
+    <BaseCard class="bus-lines p-4 md:p-6 mb-4">
         <template #label>
             <h2>Select Bus Line</h2>
         </template>

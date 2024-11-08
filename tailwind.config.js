@@ -10,6 +10,7 @@ export default {
                     dark: '#1649CA'
                 },
                 secondary: '#2E3E6E',
+                'white-gray': '#F8F8FB',
                 gray: {
                     DEFAULT: '#9A9DA4',
                     lightest: '#F3F4F9',
@@ -24,7 +25,7 @@ export default {
             height: {
                 nav: '60px',
                 'nav-desktop': '64px',
-                placeholder: '268px',
+                placeholder: '300px',
                 'placeholder-tablet': '330px',
                 'placeholder-desktop': '444px'
             }

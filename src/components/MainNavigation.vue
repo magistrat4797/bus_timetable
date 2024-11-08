@@ -1,12 +1,15 @@
 <template>
-    <BaseCard class="px-4 md:px-6 !py-0 mb-4">
+    <BaseCard class="mb-4">
         <nav class="nav">
-            <div class="nav-links" ref="navLinksContainer">
+            <div
+                class="nav-links px-4 md:px-6 flex flex-nowrap overflow-x-auto"
+                ref="navLinksContainer"
+            >
                 <RouterLink
                     v-for="link in links"
                     :key="link.name"
                     :to="{ name: link.name }"
-                    class="nav-link"
+                    class="nav-link whitespace-nowrap"
                     active-class="active"
                     @click="setIndicatorPosition"
                 >
@@ -41,16 +44,21 @@ const indicatorStyle = computed(() => ({
 
 const setIndicatorPosition = () => {
     nextTick(() => {
-        const activeLink = navLinksContainer.value?.querySelector('.active') as HTMLElement;
-        if (activeLink) {
+        const container = navLinksContainer.value;
+        const activeLink = container?.querySelector('.active');
+
+        if (activeLink instanceof HTMLElement && container) {
+            const paddingLeft = parseFloat(getComputedStyle(container).paddingLeft) || 0;
+
             indicatorWidth.value = activeLink.offsetWidth;
-            indicatorOffset.value = activeLink.offsetLeft;
+            indicatorOffset.value = activeLink.offsetLeft - paddingLeft;
             isIndicatorVisible.value = true;
         }
     });
 };
 
 const route = useRoute();
+
 onMounted(() => {
     window.onload = setIndicatorPosition;
 

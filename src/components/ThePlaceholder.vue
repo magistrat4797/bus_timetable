@@ -1,100 +1,48 @@
 <template>
-    <BaseCard class="placeholder dashed-border w-full relative rounded">
-        <div
-            v-if="content.length"
-            class="w-full h-full rounded-lg bg-white z-10 relative overflow-auto"
-        >
-            <div v-if="props.type === 'stops' && selectedLineNumber" class="font-bold">
-                Bus line: {{ selectedLineNumber }}
-            </div>
-            <div v-else-if="props.type === 'times' && selectedStopName" class="font-bold">
-                Bus Stop: {{ selectedStopName }}
-            </div>
-
-            <button
-                v-if="props.type === 'stops' && selectedLineNumber"
-                @click="toggleSortOrder"
-                class="sort-button"
-            >
-                Sortuj
-            </button>
-
-            <div
-                v-for="(item, index) in content"
-                :key="index"
-                class="placeholder__item"
-                :class="{ active: isStopActive(item) }"
-                @click="handleClick(item)"
-            >
-                {{ displayText(item) }}
-            </div>
-        </div>
-        <div v-else class="placeholder__label">{{ label }}</div>
+    <BaseCard class="placeholder relative">
+        <template v-if="props.type === 'stops' && content.length">
+            <BusStopsList
+                :stops="content"
+                :show-line-number="true"
+                :selected-line-number="selectedLineNumber"
+                :clickable="true"
+            />
+        </template>
+        <template v-else-if="props.type === 'times' && content.length">
+            <BusTimesList :times="content" :selected-stop-name="selectedStopName" />
+        </template>
+        <template v-else>
+            <div class="placeholder__label">{{ label }}</div>
+        </template>
     </BaseCard>
 </template>
 
 <script lang="ts" setup>
-import { computed, defineProps, ref } from 'vue';
-import { useBusStore } from '@/composables/useBusStore';
+import { computed, defineProps } from 'vue';
 import BaseCard from '@/components/BaseCard.vue';
+import BusStopsList from '@/components/BusStopsList.vue';
+import BusTimesList from '@/components/BusTimesList.vue';
+import { useBusStore } from '@/composables/useBusStore';
 
-type PlaceholderType = 'stops' | 'times';
-interface StopItem {
-    stop: string;
-    order: number;
-    time?: string;
-}
+const props = defineProps<{ type: 'stops' | 'times' }>();
+const { activeStops, activeTimes, selectedLineNumber, selectedStopName } = useBusStore();
 
-const props = defineProps<{ type: PlaceholderType }>();
-const { activeStops, activeTimes, selectedLineNumber, selectedStopName, selectStop } =
-    useBusStore();
-
-const sortByOrder = ref(false);
-
-const content = computed<StopItem[] | string[]>(() => {
-    if (props.type === 'stops') {
-        let stops = [...activeStops.value];
-        if (sortByOrder.value) {
-            stops.sort((a, b) => a.order - b.order);
-        }
-        return stops;
-    }
-    return activeTimes.value;
-});
+const content = computed(() => (props.type === 'stops' ? activeStops.value : activeTimes.value));
 
 const label = computed(() => {
-    if (!selectedLineNumber.value) {
+    if (props.type === 'stops' && !selectedLineNumber.value) {
         return 'Please select the bus line first';
     }
-    if (props.type === 'times' && !selectedStopName.value) {
-        return 'Please select the bus stop first';
+    if (props.type === 'times') {
+        if (!selectedLineNumber.value) {
+            return 'Please select the bus line first';
+        }
+        if (!selectedStopName.value) {
+            return 'Please select the bus stop first';
+        }
     }
     return '';
 });
-
-const isStopActive = (item: StopItem | string): boolean => {
-    if (props.type === 'stops' && typeof item !== 'string') {
-        return item.stop === selectedStopName.value;
-    }
-    return false;
-};
-
-const handleClick = (item: StopItem | string) => {
-    if (props.type === 'stops' && typeof item !== 'string') {
-        selectStop(item.stop);
-    }
-};
-
-const displayText = (item: StopItem | string): string => {
-    if (props.type === 'stops' && typeof item !== 'string') {
-        return `${item.stop} (Order: ${item.order})`;
-    }
-    return item as string;
-};
-
-const toggleSortOrder = () => {
-    sortByOrder.value = !sortByOrder.value;
-};
 </script>
 
 <style lang="scss" scoped>

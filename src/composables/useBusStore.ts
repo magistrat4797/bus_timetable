@@ -5,13 +5,17 @@ import { StateInterface } from '@/models/interfaces';
 export function useBusStore() {
     const store = useStore<StateInterface>();
 
+    // States
+    const selectedLineNumber = computed(() => store.state.selectedLineNumber);
+    const selectedStopName = computed(() => store.state.selectedStopName);
+    const isLoading = computed(() => store.state.isLoading);
+    const error = computed(() => store.state.error);
+
     // Getters
     const allLines = computed(() => store.getters.allLines);
-    const selectedLineNumber = computed(() => store.state.selectedLineNumber);
+    const allStops = computed(() => store.state.stops); // <-- Dodano allStops
     const activeStops = computed(() => store.getters.activeStops);
-    const selectedStopName = computed(() => store.state.selectedStopName);
     const activeTimes = computed(() => store.getters.activeTimes);
-    const isLoading = computed(() => store.state.isLoading);
 
     // Actions
     const loadLines = () => {
@@ -28,11 +32,13 @@ export function useBusStore() {
 
     return {
         allLines,
+        allStops,
         selectedLineNumber,
         activeStops,
         selectedStopName,
         activeTimes,
         isLoading,
+        error,
         loadLines,
         selectLine,
         selectStop
