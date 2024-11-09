@@ -1,19 +1,27 @@
 <template>
     <div class="w-full h-full rounded-lg bg-white relative">
-        <div class="bus-stops__header !pb-4 p-4 md:p-6 border-b border-gray-light">
+        <div
+            class="bus-list__header !pb-4 p-4 md:p-6 border-b border-gray-light"
+            :class="{ 'md:pl-2 md:pt-2': showSearch }"
+        >
             <template v-if="showLineNumber && selectedLineNumber">
-                <div class="font-semibold h-[40px]">Bus line: {{ selectedLineNumber }}</div>
+                <div class="font-semibold text-sm leading-6">
+                    Bus line: {{ selectedLineNumber }}
+                </div>
             </template>
             <template v-if="showSearch">
                 <BaseInput
                     v-model="searchQuery"
                     placeholder="Search"
-                    class="search-input max-w-[288px]"
+                    class="search-input w-full sm:max-w-[288px]"
                     :icon="searchIcon"
                 />
             </template>
             <template v-if="stops.length">
-                <div class="flex items-center gap-2 mt-2 md:mt-4">
+                <div
+                    class="flex items-center gap-2 mt-4 md:mt-8"
+                    :class="{ 'md:pl-4': showSearch }"
+                >
                     <div class="text-gray-darkest text-xs leading-4 font-semibold">Bus Stops</div>
                     <button
                         @click="toggleSortOrder"
@@ -26,13 +34,13 @@
             </template>
         </div>
         <template v-if="filteredStops.length">
-            <div class="bus-stops">
+            <div class="bus-list styled-scroll">
                 <div
                     v-for="(item, index) in filteredStops"
                     :key="index"
-                    class="bus-stop"
+                    class="bus-list__item"
                     :class="{
-                        'bus-stop--action': props.clickable,
+                        'bus-list__item--action': props.clickable,
                         active: isStopActive(item)
                     }"
                     @click="handleClick(item)"
@@ -42,14 +50,17 @@
             </div>
         </template>
         <template v-else>
-            <div class="no-results">No stops found for the given search.</div>
+            <div class="p-4 md:py-4 md:px-6">
+                <div class="no-results text-sm leading-6">No stops found for the given search.</div>
+            </div>
         </template>
     </div>
 </template>
 
 <script lang="ts" setup>
-import { computed, defineProps, ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useBusStore } from '@/composables/useBusStore';
+import { useLists } from '@/composables/useLists';
 import { searchIcon, sortIcon } from '@/assets/icons/icons';
 import BaseInput from '@/components/BaseInput.vue';
 
@@ -68,7 +79,9 @@ const props = defineProps<{
     showSearch?: boolean;
 }>();
 
-const { selectedLineNumber, selectedStopName, selectStop } = useBusStore();
+const { formatOrder } = useLists();
+const { selectedLineNumber, selectedStop, selectStop } = useBusStore();
+
 const sortByOrder = ref(false);
 const searchQuery = ref('');
 
@@ -97,9 +110,18 @@ const filteredStops = computed(() => {
     if (!searchQuery.value) {
         return sortedStops.value;
     }
-    return sortedStops.value.filter((stop) =>
-        stop.stop.toLowerCase().includes(searchQuery.value.toLowerCase())
-    );
+
+    const search = searchQuery.value.toLowerCase();
+
+    return sortedStops.value.filter((stop) => {
+        const formattedOrder = formatOrder(stop.order);
+        const fullNameWithOrder = `${stop.stop} ${formattedOrder}`.toLowerCase();
+        return (
+            stop.stop.toLowerCase().includes(search) ||
+            formattedOrder.includes(search) ||
+            fullNameWithOrder.includes(search)
+        );
+    });
 });
 
 // Toggle sort order
@@ -113,63 +135,22 @@ const tooltipText = computed(() => {
 
 // Check if a stop is active
 const isStopActive = (item: StopItem) => {
-    return item.stop === selectedStopName.value;
+    return item.stop === selectedStop.value?.name;
 };
 
 // Handle item click
 const handleClick = (item: StopItem) => {
     if (props.clickable) {
-        selectStop(item.stop);
+        if (selectedStop.value?.name === item.stop) {
+            selectStop(null);
+        } else {
+            selectStop(item.stop);
+        }
     }
 };
 
-// Display text
+// Display stop name with formatted order
 const displayText = (item: StopItem) => {
-    return `${item.stop} (Order: ${item.order})`;
+    return `${item.stop} ${formatOrder(item.order)}`;
 };
 </script>
-
-<style lang="scss" scoped>
-@import '@/assets/styles/modules/_breakpoints.scss';
-
-$header-height: 96px;
-$header-height-tablet: 120px;
-
-$item-height: 48px;
-$item-height-tablet: 56px;
-.bus-stops {
-    @apply overflow-auto max-h-[500px];
-    height: calc(100% - $header-height);
-    @include md {
-        height: calc(100% - $header-height-tablet);
-    }
-    &__header {
-        height: $header-height;
-        @include md {
-            height: $header-height-tablet;
-        }
-    }
-}
-.bus-stop {
-    @apply flex items-center px-4 md:px-6;
-    height: $item-height;
-    @include md {
-        height: $item-height-tablet;
-    }
-}
-.sort-btn {
-    @apply inline-flex text-gray-dark;
-    .icon {
-        @apply transition-transform duration-300;
-    }
-    &:hover,
-    &:active {
-        @apply text-primary;
-    }
-    &.active {
-        .icon {
-            @apply rotate-180;
-        }
-    }
-}
-</style>

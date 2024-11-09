@@ -8,7 +8,7 @@ export default createStore<StateInterface>({
         stops: [],
         selectedLineStops: [],
         selectedLineNumber: null,
-        selectedStopName: null,
+        selectedStop: { name: null, order: null }, // Obiekt z name i order
         isLoading: false,
         error: null
     },
@@ -25,14 +25,13 @@ export default createStore<StateInterface>({
                 .filter((stop): stop is StopInterface => stop !== undefined);
         },
         activeTimes(state): string[] {
-            if (!state.selectedStopName) return [];
+            if (!state.selectedStop.name) return [];
 
             let times = state.selectedLineStops
-                .filter((s) => s.stop === state.selectedStopName)
+                .filter((s) => s.stop === state.selectedStop.name)
                 .map((s) => s.time);
 
             times = Array.from(new Set(times));
-
             times.sort((a, b) => {
                 const [hoursA, minutesA] = a.split(':').map(Number);
                 const [hoursB, minutesB] = b.split(':').map(Number);
@@ -61,8 +60,8 @@ export default createStore<StateInterface>({
         setSelectedLineNumber(state, line: number | null) {
             state.selectedLineNumber = line;
         },
-        setSelectedStopName(state, stop: string | null) {
-            state.selectedStopName = stop;
+        setSelectedStop(state, stop: { name: string | null; order: number | null }) {
+            state.selectedStop = stop;
         },
         setLoading(state, isLoading: boolean) {
             state.isLoading = isLoading;
@@ -71,7 +70,9 @@ export default createStore<StateInterface>({
             state.error = error;
         },
         resetSelection(state) {
-            state.selectedStopName = null;
+            state.selectedLineNumber = null;
+            state.selectedLineStops = [];
+            state.selectedStop = { name: null, order: null };
         }
     },
     actions: {
@@ -102,20 +103,19 @@ export default createStore<StateInterface>({
         },
         selectLine({ commit, dispatch, state }, line: number) {
             if (state.selectedLineNumber === line) {
-                commit('setSelectedLineNumber', null);
-                commit('setSelectedLineStops', []);
                 commit('resetSelection');
             } else {
-                commit('setSelectedLineNumber', line);
                 commit('resetSelection');
+                commit('setSelectedLineNumber', line);
                 dispatch('loadStopsForLine', line);
             }
         },
-        selectStop({ commit, state }, stop: string) {
-            if (state.selectedStopName === stop) {
-                commit('setSelectedStopName', null);
+        selectStop({ commit, state }, stopName: string) {
+            const stop = state.selectedLineStops.find((s) => s.stop === stopName);
+            if (stop) {
+                commit('setSelectedStop', { name: stop.stop, order: stop.order });
             } else {
-                commit('setSelectedStopName', stop);
+                commit('setSelectedStop', { name: null, order: null });
             }
         }
     }

@@ -2,7 +2,7 @@
     <BaseCard class="mb-4">
         <nav class="nav">
             <div
-                class="nav-links px-4 md:px-6 flex flex-nowrap overflow-x-auto"
+                class="nav-links px-4 md:px-6 flex flex-nowrap overflow-x-auto styled-scroll"
                 ref="navLinksContainer"
             >
                 <RouterLink

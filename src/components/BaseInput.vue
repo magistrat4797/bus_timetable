@@ -48,7 +48,7 @@ input {
     @apply block w-full border border-gray-light hover:border-[#BDBDBD] focus:border-primary rounded bg-white text-xs leading-4 transition-colors duration-300 ease-in-out outline-none px-4 h-10;
 }
 .form-group {
-    @apply relative;
+    @apply block relative;
     .label {
         @apply absolute top-3 left-3 m-0 px-1 text-gray-dark bg-transparent text-xs leading-4 whitespace-nowrap pointer-events-none transition-all duration-300 ease-in-out will-change-transform z-1 text-ellipsis overflow-hidden;
         max-width: calc(100% - 24px);

@@ -1,10 +1,17 @@
 <template>
     <div class="w-full h-full rounded-lg bg-white relative">
-        <template v-if="selectedStopName">
-            <div class="font-semibold">Bus Stop: {{ selectedStopName }}</div>
-        </template>
-        <div class="overflow-y-auto">
-            <div v-for="(time, index) in times" :key="index" class="placeholder__item">
+        <div class="bus-list__header !pb-4 p-4 md:p-6 border-b border-gray-light">
+            <template v-if="selectedStop">
+                <div class="font-semibold text-sm leading-6 h-[40px]">
+                    Bus Stop: {{ stopDisplay }}
+                </div>
+            </template>
+            <div class="flex items-center gap-2 mt-3 md:mt-4">
+                <div class="text-gray-darkest text-xs leading-4 font-semibold">Time</div>
+            </div>
+        </div>
+        <div class="bus-list styled-scroll">
+            <div v-for="(time, index) in times" :key="index" class="bus-list__item">
                 {{ time }}
             </div>
         </div>
@@ -12,11 +19,21 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps } from 'vue';
+import { computed } from 'vue';
+import { useLists } from '@/composables/useLists';
 
-// Props
-defineProps<{
+const props = defineProps<{
     times: string[];
-    selectedStopName: string | null;
+    selectedStop: { name: string; order: number } | null;
 }>();
+
+const { formatOrder } = useLists();
+
+// Display the formatted stop name and order
+const stopDisplay = computed(() => {
+    if (props.selectedStop) {
+        return `${props.selectedStop.name} ${formatOrder(props.selectedStop.order)}`;
+    }
+    return '';
+});
 </script>

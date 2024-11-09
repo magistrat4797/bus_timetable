@@ -3,7 +3,7 @@
         <template v-if="isLoading || error">
             <div class="mb-4">
                 <template v-if="isLoading">
-                    <div class="flex items-center justify-center min-h-[60px]">
+                    <div class="flex items-center justify-center min-h-[136px]">
                         <TheLoader />
                     </div>
                 </template>

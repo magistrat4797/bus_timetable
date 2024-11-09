@@ -4,7 +4,7 @@
 
 <style lang="scss" scoped>
 .loader {
-    @apply rounded-full bg-gray-dark w-[35px] p-[5px];
+    @apply rounded-full bg-gray-dark w-[43px] p-[6px];
     aspect-ratio: 1;
     mask:
         conic-gradient(#0000 10%, #000),

@@ -7,13 +7,13 @@ export function useBusStore() {
 
     // States
     const selectedLineNumber = computed(() => store.state.selectedLineNumber);
-    const selectedStopName = computed(() => store.state.selectedStopName);
+    const selectedStop = computed(() => store.state.selectedStop);
     const isLoading = computed(() => store.state.isLoading);
     const error = computed(() => store.state.error);
 
     // Getters
     const allLines = computed(() => store.getters.allLines);
-    const allStops = computed(() => store.state.stops); // <-- Dodano allStops
+    const allStops = computed(() => store.state.stops);
     const activeStops = computed(() => store.getters.activeStops);
     const activeTimes = computed(() => store.getters.activeTimes);
 
@@ -26,21 +26,26 @@ export function useBusStore() {
         store.dispatch('selectLine', line);
     };
 
-    const selectStop = (stop: string) => {
+    const selectStop = (stop: string | null) => {
         store.dispatch('selectStop', stop);
+    };
+
+    const resetSelection = () => {
+        store.commit('resetSelection');
     };
 
     return {
         allLines,
         allStops,
         selectedLineNumber,
+        selectedStop,
         activeStops,
-        selectedStopName,
         activeTimes,
         isLoading,
         error,
         loadLines,
         selectLine,
-        selectStop
+        selectStop,
+        resetSelection
     };
 }

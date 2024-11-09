@@ -25,8 +25,7 @@ export default {
             height: {
                 nav: '60px',
                 'nav-desktop': '64px',
-                placeholder: '300px',
-                'placeholder-tablet': '330px',
+                placeholder: '393px',
                 'placeholder-desktop': '444px'
             }
         },

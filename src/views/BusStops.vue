@@ -3,7 +3,7 @@
         <template v-if="isLoading || error">
             <div class="mb-4">
                 <template v-if="isLoading">
-                    <div class="flex items-center justify-center min-h-[60px]">
+                    <div class="flex items-center justify-center min-h-[120px]">
                         <TheLoader />
                     </div>
                 </template>
@@ -13,8 +13,8 @@
             </div>
         </template>
         <template v-else>
-            <BaseCard class="stops-page relative">
-                <BusStopsList :stops="filteredStops" :show-search="true" />
+            <BaseCard class="relative">
+                <BusStopsList :stops="uniqueStops" :show-search="true" />
             </BaseCard>
         </template>
     </MainContainer>
@@ -41,6 +41,4 @@ const uniqueStops = computed(() => {
         return true;
     });
 });
-
-const filteredStops = computed(() => uniqueStops.value);
 </script>

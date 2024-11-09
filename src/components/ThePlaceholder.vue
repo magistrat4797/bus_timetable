@@ -8,8 +8,12 @@
                 :clickable="true"
             />
         </template>
-        <template v-else-if="props.type === 'times' && content.length">
-            <BusTimesList :times="content" :selected-stop-name="selectedStopName" />
+        <template v-else-if="props.type === 'times' && content.length && isSelectedStop">
+            <!-- Przekazujemy selectedStop tylko wtedy, gdy name i order nie są null -->
+            <BusTimesList
+                :times="content"
+                :selected-stop="{ name: selectedStop.name!, order: selectedStop.order! }"
+            />
         </template>
         <template v-else>
             <div class="placeholder__label">{{ label }}</div>
@@ -18,14 +22,19 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, defineProps } from 'vue';
+import { computed } from 'vue';
 import BaseCard from '@/components/BaseCard.vue';
 import BusStopsList from '@/components/BusStopsList.vue';
 import BusTimesList from '@/components/BusTimesList.vue';
 import { useBusStore } from '@/composables/useBusStore';
 
 const props = defineProps<{ type: 'stops' | 'times' }>();
-const { activeStops, activeTimes, selectedLineNumber, selectedStopName } = useBusStore();
+const { activeStops, activeTimes, selectedLineNumber, selectedStop } = useBusStore();
+
+// Sprawdzenie, czy selectedStop ma poprawne wartości
+const isSelectedStop = computed(() => {
+    return selectedStop.value.name !== null && selectedStop.value.order !== null;
+});
 
 const content = computed(() => (props.type === 'stops' ? activeStops.value : activeTimes.value));
 
@@ -37,7 +46,7 @@ const label = computed(() => {
         if (!selectedLineNumber.value) {
             return 'Please select the bus line first';
         }
-        if (!selectedStopName.value) {
+        if (!isSelectedStop.value) {
             return 'Please select the bus stop first';
         }
     }
@@ -48,7 +57,7 @@ const label = computed(() => {
 <style lang="scss" scoped>
 $placeholder-min-height: 444px;
 .placeholder {
-    @apply h-placeholder md:h-placeholder-tablet lg:h-placeholder-desktop;
+    @apply h-placeholder md:h-placeholder-desktop;
     &__label {
         @apply flex items-center justify-center text-sm leading-6 text-gray-dark rounded p-4 md:p-6 text-center h-full;
         background-image: repeating-linear-gradient(
