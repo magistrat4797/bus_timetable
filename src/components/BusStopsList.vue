@@ -6,7 +6,7 @@
         >
             <template v-if="showLineNumber && selectedLineNumber">
                 <div class="font-semibold text-sm leading-6">
-                    Bus line: {{ selectedLineNumber }}
+                    Bus Line: {{ selectedLineNumber }}
                 </div>
             </template>
             <template v-if="showSearch">
