@@ -8,7 +8,7 @@ export default createStore<StateInterface>({
         stops: [],
         selectedLineStops: [],
         selectedLineNumber: null,
-        selectedStop: { name: null, order: null }, // Obiekt z name i order
+        selectedStop: { name: null, order: null },
         isLoading: false,
         error: null
     },

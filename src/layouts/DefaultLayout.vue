@@ -10,10 +10,10 @@
 <script lang="ts" setup>
 import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { useBusStore } from '@/composables/useBusStore';
+import { useMainStore } from '@/composables/useMainStore';
 import TheHeader from '@/components/common/TheHeader.vue';
 
-const { loadLines, resetSelection } = useBusStore();
+const { loadLines, resetSelection } = useMainStore();
 const router = useRouter();
 
 onMounted(() => {

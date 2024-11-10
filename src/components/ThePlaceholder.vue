@@ -1,7 +1,7 @@
 <template>
     <BaseCard class="placeholder relative">
         <template v-if="props.type === 'stops' && content.length">
-            <BusStopsList
+            <StopsList
                 :stops="content"
                 :show-line-number="true"
                 :selected-line-number="selectedLineNumber"
@@ -10,7 +10,7 @@
         </template>
         <template v-else-if="props.type === 'times' && content.length && isSelectedStop">
             <!-- Przekazujemy selectedStop tylko wtedy, gdy name i order nie są null -->
-            <BusTimesList
+            <TimesList
                 :times="content"
                 :selected-stop="{ name: selectedStop.name!, order: selectedStop.order! }"
             />
@@ -23,15 +23,15 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue';
-import BaseCard from '@/components/BaseCard.vue';
-import BusStopsList from '@/components/BusStopsList.vue';
-import BusTimesList from '@/components/BusTimesList.vue';
-import { useBusStore } from '@/composables/useBusStore';
+import BaseCard from '@/components/ui/BaseCard.vue';
+import StopsList from '@/components/StopsList.vue';
+import TimesList from '@/components/TimesList.vue';
+import { useMainStore } from '@/composables/useMainStore';
 
 const props = defineProps<{ type: 'stops' | 'times' }>();
-const { activeStops, activeTimes, selectedLineNumber, selectedStop } = useBusStore();
 
-// Sprawdzenie, czy selectedStop ma poprawne wartości
+const { activeStops, activeTimes, selectedLineNumber, selectedStop } = useMainStore();
+
 const isSelectedStop = computed(() => {
     return selectedStop.value.name !== null && selectedStop.value.order !== null;
 });

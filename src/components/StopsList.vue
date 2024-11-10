@@ -59,20 +59,15 @@
 
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue';
-import { useBusStore } from '@/composables/useBusStore';
+import { useMainStore } from '@/composables/useMainStore';
 import { useLists } from '@/composables/useLists';
 import { searchIcon, sortIcon } from '@/assets/icons/icons';
-import BaseInput from '@/components/BaseInput.vue';
+import { StopType } from '@/models/types';
 
-type StopItem = {
-    stop: string;
-    order: number;
-    time?: string;
-};
+import BaseInput from '@/components/ui/BaseInput.vue';
 
-// Props
 const props = defineProps<{
-    stops: StopItem[];
+    stops: StopType[];
     showLineNumber?: boolean;
     selectedLineNumber?: number | null;
     clickable?: boolean;
@@ -80,7 +75,7 @@ const props = defineProps<{
 }>();
 
 const { formatOrder } = useLists();
-const { selectedLineNumber, selectedStop, selectStop } = useBusStore();
+const { selectedLineNumber, selectedStop, selectStop } = useMainStore();
 
 const sortByOrder = ref(false);
 const searchQuery = ref('');
@@ -134,12 +129,12 @@ const tooltipText = computed(() => {
 });
 
 // Check if a stop is active
-const isStopActive = (item: StopItem) => {
+const isStopActive = (item: StopType) => {
     return item.stop === selectedStop.value?.name;
 };
 
 // Handle item click
-const handleClick = (item: StopItem) => {
+const handleClick = (item: StopType) => {
     if (props.clickable) {
         if (selectedStop.value?.name === item.stop) {
             selectStop(null);
@@ -150,7 +145,7 @@ const handleClick = (item: StopItem) => {
 };
 
 // Display stop name with formatted order
-const displayText = (item: StopItem) => {
+const displayText = (item: StopType) => {
     return `${item.stop} ${formatOrder(item.order)}`;
 };
 </script>

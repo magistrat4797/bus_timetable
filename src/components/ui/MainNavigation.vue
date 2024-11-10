@@ -24,11 +24,10 @@
 <script lang="ts" setup>
 import { ref, computed, onMounted, nextTick, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import BaseCard from '@/components/BaseCard.vue';
+import { NavLinkType } from '@/models/types';
+import BaseCard from '@/components/ui/BaseCard.vue';
 
-type NavLink = { name: string; label: string };
-
-defineProps<{ links: NavLink[] }>();
+defineProps<{ links: NavLinkType[] }>();
 
 const indicatorWidth = ref(0);
 const indicatorOffset = ref(0);

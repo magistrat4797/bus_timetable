@@ -18,10 +18,10 @@
 </template>
 
 <script lang="ts" setup>
-import { useBusStore } from '@/composables/useBusStore';
-import BaseCard from '@/components/BaseCard.vue';
+import { useMainStore } from '@/composables/useMainStore';
+import BaseCard from '@/components/ui/BaseCard.vue';
 
-const { allLines, selectedLineNumber, selectLine } = useBusStore();
+const { allLines, selectedLineNumber, selectLine } = useMainStore();
 </script>
 
 <style lang="scss" scoped>

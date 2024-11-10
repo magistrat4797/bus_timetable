@@ -2,7 +2,7 @@ import { computed } from 'vue';
 import { useStore } from 'vuex';
 import { StateInterface } from '@/models/interfaces';
 
-export function useBusStore() {
+export function useMainStore() {
     const store = useStore<StateInterface>();
 
     // States

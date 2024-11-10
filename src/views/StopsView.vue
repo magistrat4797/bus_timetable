@@ -14,7 +14,7 @@
         </template>
         <template v-else>
             <BaseCard class="relative">
-                <BusStopsList :stops="uniqueStops" :show-search="true" />
+                <StopsList :stops="uniqueStops" :show-search="true" />
             </BaseCard>
         </template>
     </MainContainer>
@@ -22,15 +22,15 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue';
-import MainContainer from '@/components/MainContainer.vue';
-import BaseCard from '@/components/BaseCard.vue';
-import BusStopsList from '@/components/BusStopsList.vue';
+import MainContainer from '@/components/ui/MainContainer.vue';
+import BaseCard from '@/components/ui/BaseCard.vue';
+import StopsList from '@/components/StopsList.vue';
 import TheLoader from '@/components/common/TheLoader.vue';
-import { useBusStore } from '@/composables/useBusStore';
+import { useMainStore } from '@/composables/useMainStore';
 
-const { allStops, isLoading, error } = useBusStore();
+const { allStops, isLoading, error } = useMainStore();
 
-// Create a computed property to filter unique stops
+// Computed property to filter unique stops
 const uniqueStops = computed(() => {
     const stopNames = new Set();
     return allStops.value.filter((stop) => {

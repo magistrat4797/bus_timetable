@@ -13,7 +13,7 @@
             </div>
         </template>
         <template v-else>
-            <BusLinesList />
+            <LinesList />
             <div class="flex flex-col md:flex-row gap-4">
                 <ThePlaceholder class="md:w-1/2" type="stops" />
                 <ThePlaceholder class="md:w-1/2" type="times" />
@@ -23,11 +23,11 @@
 </template>
 
 <script lang="ts" setup>
-import { useBusStore } from '@/composables/useBusStore';
-import MainContainer from '@/components/MainContainer.vue';
+import { useMainStore } from '@/composables/useMainStore';
+import MainContainer from '@/components/ui/MainContainer.vue';
 import ThePlaceholder from '@/components/ThePlaceholder.vue';
 import TheLoader from '@/components/common/TheLoader.vue';
-import BusLinesList from '@/components/BusLinesList.vue';
+import LinesList from '@/components/LinesList.vue';
 
-const { isLoading, error } = useBusStore();
+const { isLoading, error } = useMainStore();
 </script>

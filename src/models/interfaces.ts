@@ -15,7 +15,7 @@ export interface StateInterface {
     stops: StopInterface[];
     selectedLineStops: StopInterface[];
     selectedLineNumber: number | null;
-    selectedStop: SelectedStopInterface; // Zmiana: Obiekt selectedStop
+    selectedStop: SelectedStopInterface;
     isLoading: boolean;
     error: string | null;
 }

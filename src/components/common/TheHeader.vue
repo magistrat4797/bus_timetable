@@ -4,18 +4,18 @@
             <BaseHeading>
                 <h1>Timetable</h1>
             </BaseHeading>
-            <MainNavigation :links="links" />
+            <MainNavigation :links="navLinks" />
         </MainContainer>
     </header>
 </template>
 
 <script lang="ts" setup>
-import BaseHeading from '@/components/BaseHeading.vue';
-import MainContainer from '@/components/MainContainer.vue';
-import MainNavigation from '@/components/MainNavigation.vue';
+import BaseHeading from '@/components/ui/BaseHeading.vue';
+import MainContainer from '@/components/ui/MainContainer.vue';
+import MainNavigation from '@/components/ui/MainNavigation.vue';
 
-const links = [
-    { name: 'BusLines', label: 'Bus Lines' },
-    { name: 'BusStops', label: 'Stops' }
+const navLinks = [
+    { name: 'LinesView', label: 'Bus Lines' },
+    { name: 'StopsView', label: 'Stops' }
 ];
 </script>
