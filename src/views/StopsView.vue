@@ -25,7 +25,7 @@ import { computed } from 'vue';
 import MainContainer from '@/components/ui/MainContainer.vue';
 import BaseCard from '@/components/ui/BaseCard.vue';
 import StopsList from '@/components/StopsList.vue';
-import TheLoader from '@/components/common/TheLoader.vue';
+import TheLoader from '@/components/ui/TheLoader.vue';
 import { useMainStore } from '@/composables/useMainStore';
 
 const { allStops, isLoading, error } = useMainStore();

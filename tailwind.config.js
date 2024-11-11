@@ -27,6 +27,9 @@ export default {
                 'nav-desktop': '64px',
                 placeholder: '393px',
                 'placeholder-desktop': '444px'
+            },
+            maxWidth: {
+                container: '1440px'
             }
         },
         fontFamily: {

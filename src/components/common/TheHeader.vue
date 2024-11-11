@@ -2,7 +2,7 @@
     <header>
         <MainContainer>
             <BaseHeading>
-                <h1>Timetable</h1>
+                <h1>{{ pageName }}</h1>
             </BaseHeading>
             <MainNavigation :links="navLinks" />
         </MainContainer>
@@ -13,6 +13,10 @@
 import BaseHeading from '@/components/ui/BaseHeading.vue';
 import MainContainer from '@/components/ui/MainContainer.vue';
 import MainNavigation from '@/components/ui/MainNavigation.vue';
+
+defineProps<{
+    pageName: string;
+}>();
 
 const navLinks = [
     { name: 'LinesView', label: 'Bus Lines' },

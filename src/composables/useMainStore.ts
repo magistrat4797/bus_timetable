@@ -7,7 +7,7 @@ export function useMainStore() {
 
     // States
     const selectedLineNumber = computed(() => store.state.selectedLineNumber);
-    const selectedStop = computed(() => store.state.selectedStop);
+    const selectedStop = computed(() => store.state.selectedStop); // Teraz selectedStop zawiera także 'times'
     const isLoading = computed(() => store.state.isLoading);
     const error = computed(() => store.state.error);
 

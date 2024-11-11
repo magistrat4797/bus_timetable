@@ -1,6 +1,6 @@
 <template>
     <section class="py-5 md:py-10">
-        <TheHeader />
+        <TheHeader page-name="Timetable" />
         <main>
             <RouterView />
         </main>

@@ -7,13 +7,18 @@
             <template v-if="icon">
                 <span class="input-icon icon" v-html="icon" />
             </template>
-            <input :type="type" v-model="internalValue" @focus="onFocus" @blur="onBlur" />
+            <input
+                :type="type"
+                v-model="internalValue"
+                @focus="setFocusState(true)"
+                @blur="setFocusState(false)"
+            />
         </label>
     </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, watch } from 'vue';
+import { ref, computed, watch } from 'vue';
 
 const emit = defineEmits<{
     (event: 'update:modelValue', value: string): void;
@@ -26,7 +31,7 @@ const props = defineProps<{
     icon?: string;
 }>();
 
-const type = props.type || 'text';
+const type = computed(() => props.type || 'text');
 const internalValue = ref(props.modelValue);
 const isFocused = ref(false);
 
@@ -34,12 +39,8 @@ watch(internalValue, (newValue) => {
     emit('update:modelValue', newValue);
 });
 
-const onFocus = () => {
-    isFocused.value = true;
-};
-
-const onBlur = () => {
-    isFocused.value = false;
+const setFocusState = (state: boolean) => {
+    isFocused.value = state;
 };
 </script>
 

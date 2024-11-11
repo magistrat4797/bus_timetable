@@ -8,6 +8,7 @@ export interface StopInterface {
 export interface SelectedStopInterface {
     name: string | null;
     order: number | null;
+    times: string[];
 }
 
 export interface StateInterface {

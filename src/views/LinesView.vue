@@ -26,7 +26,7 @@
 import { useMainStore } from '@/composables/useMainStore';
 import MainContainer from '@/components/ui/MainContainer.vue';
 import ThePlaceholder from '@/components/ThePlaceholder.vue';
-import TheLoader from '@/components/common/TheLoader.vue';
+import TheLoader from '@/components/ui/TheLoader.vue';
 import LinesList from '@/components/LinesList.vue';
 
 const { isLoading, error } = useMainStore();

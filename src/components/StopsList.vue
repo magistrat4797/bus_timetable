@@ -5,7 +5,7 @@
             :class="{ 'md:pl-2 md:pt-2': showSearch }"
         >
             <template v-if="showLineNumber && selectedLineNumber">
-                <div class="font-semibold text-sm leading-6">
+                <div class="selected-line font-semibold text-sm leading-6">
                     Bus Line: {{ selectedLineNumber }}
                 </div>
             </template>

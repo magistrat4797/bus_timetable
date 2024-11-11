@@ -2,7 +2,7 @@
     <div class="w-full h-full rounded-lg bg-white relative">
         <div class="bus-list__header !pb-4 p-4 md:p-6 border-b border-gray-light">
             <template v-if="selectedStop">
-                <div class="font-semibold text-sm leading-6 h-[40px]">
+                <div class="selected-stop font-semibold text-sm leading-6 h-[40px]">
                     Bus Stop: {{ stopDisplay }}
                 </div>
             </template>
@@ -29,7 +29,6 @@ const props = defineProps<{
 
 const { formatOrder } = useLists();
 
-// Display the formatted stop name and order
 const stopDisplay = computed(() => {
     if (props.selectedStop) {
         return `${props.selectedStop.name} ${formatOrder(props.selectedStop.order)}`;

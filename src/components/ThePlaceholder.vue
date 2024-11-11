@@ -1,23 +1,18 @@
 <template>
     <BaseCard class="placeholder relative">
-        <template v-if="props.type === 'stops' && content.length">
-            <StopsList
-                :stops="content"
-                :show-line-number="true"
-                :selected-line-number="selectedLineNumber"
-                :clickable="true"
-            />
-        </template>
-        <template v-else-if="props.type === 'times' && content.length && isSelectedStop">
-            <!-- Przekazujemy selectedStop tylko wtedy, gdy name i order nie są null -->
-            <TimesList
-                :times="content"
-                :selected-stop="{ name: selectedStop.name!, order: selectedStop.order! }"
-            />
-        </template>
-        <template v-else>
-            <div class="placeholder__label">{{ label }}</div>
-        </template>
+        <StopsList
+            v-if="type === 'stops' && content.length"
+            :stops="content"
+            :show-line-number="true"
+            :selected-line-number="selectedLineNumber"
+            :clickable="true"
+        />
+        <TimesList
+            v-else-if="type === 'times' && content.length && isSelectedStop"
+            :times="content"
+            :selected-stop="{ name: selectedStop.name, order: selectedStop.order }"
+        />
+        <div v-else class="placeholder__label">{{ label }}</div>
     </BaseCard>
 </template>
 
@@ -36,7 +31,9 @@ const isSelectedStop = computed(() => {
     return selectedStop.value.name !== null && selectedStop.value.order !== null;
 });
 
-const content = computed(() => (props.type === 'stops' ? activeStops.value : activeTimes.value));
+const content = computed(() => {
+    return props.type === 'stops' ? activeStops.value : activeTimes.value;
+});
 
 const label = computed(() => {
     if (props.type === 'stops' && !selectedLineNumber.value) {

@@ -8,7 +8,7 @@ export default createStore<StateInterface>({
         stops: [],
         selectedLineStops: [],
         selectedLineNumber: null,
-        selectedStop: { name: null, order: null },
+        selectedStop: { name: null, order: null, times: [] },
         isLoading: false,
         error: null
     },
@@ -60,7 +60,10 @@ export default createStore<StateInterface>({
         setSelectedLineNumber(state, line: number | null) {
             state.selectedLineNumber = line;
         },
-        setSelectedStop(state, stop: { name: string | null; order: number | null }) {
+        setSelectedStop(
+            state,
+            stop: { name: string | null; order: number | null; times: string[] }
+        ) {
             state.selectedStop = stop;
         },
         setLoading(state, isLoading: boolean) {
@@ -72,7 +75,7 @@ export default createStore<StateInterface>({
         resetSelection(state) {
             state.selectedLineNumber = null;
             state.selectedLineStops = [];
-            state.selectedStop = { name: null, order: null };
+            state.selectedStop = { name: null, order: null, times: [] };
         }
     },
     actions: {
@@ -113,9 +116,12 @@ export default createStore<StateInterface>({
         selectStop({ commit, state }, stopName: string) {
             const stop = state.selectedLineStops.find((s) => s.stop === stopName);
             if (stop) {
-                commit('setSelectedStop', { name: stop.stop, order: stop.order });
+                const times = state.selectedLineStops
+                    .filter((s) => s.stop === stopName)
+                    .map((s) => s.time);
+                commit('setSelectedStop', { name: stop.stop, order: stop.order, times });
             } else {
-                commit('setSelectedStop', { name: null, order: null });
+                commit('setSelectedStop', { name: null, order: null, times: [] });
             }
         }
     }
