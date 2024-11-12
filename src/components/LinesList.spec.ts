@@ -2,22 +2,16 @@ import { mount, VueWrapper } from '@vue/test-utils';
 import LinesList from '@/components/LinesList.vue';
 import { createStore, Store } from 'vuex';
 import BaseCard from '@/components/ui/BaseCard.vue';
-import { StateInterface, SelectedStopInterface, StopInterface } from '@/models/interfaces';
+import { StateInterface } from '@/models/interfaces';
 
+// Store mockup with sample data
 const mockStore = {
     state: {
         selectedLineNumber: null,
-        lines: [1, 2, 3, 4],
-        stops: [] as StopInterface[],
-        selectedLineStops: [] as StopInterface[],
-        selectedStop: { name: null, order: null } as SelectedStopInterface,
-        isLoading: false,
-        error: null
+        lines: [101, 110, 102]
     },
     getters: {
-        allLines: () => [1, 2, 3, 4],
-        activeStops: () => [],
-        activeTimes: () => []
+        sortedLines: () => [101, 102, 110]
     },
     actions: {
         selectLine: jest.fn()
@@ -49,30 +43,29 @@ describe('LinesList.vue', () => {
 
     it('renders all bus lines correctly', () => {
         const items = wrapper.findAll('.bus-lines-list__item');
-        expect(items.length).toBe(4);
-        expect(items[0].text()).toBe('1');
-        expect(items[1].text()).toBe('2');
-        expect(items[2].text()).toBe('3');
-        expect(items[3].text()).toBe('4');
+        expect(items.length).toBe(3);
+        expect(items[0].text()).toBe('101');
+        expect(items[1].text()).toBe('102');
+        expect(items[2].text()).toBe('110');
     });
 
     it('applies "active" class when line is selected', async () => {
-        store.state.selectedLineNumber = 2;
+        store.state.selectedLineNumber = 102;
         await wrapper.vm.$nextTick();
 
         const activeItem = wrapper.find('.bus-lines-list__item.active');
         expect(activeItem.exists()).toBe(true);
-        expect(activeItem.text()).toBe('2');
+        expect(activeItem.text()).toBe('102');
     });
 
     it('calls "selectLine" action when a line is clicked', async () => {
-        const lineItem = wrapper.findAll('.bus-lines-list__item')[1];
+        const lineItem = wrapper.findAll('.bus-lines-list__item')[2];
         await lineItem.trigger('click');
 
         expect(mockStore.actions.selectLine).toHaveBeenCalled();
         expect(mockStore.actions.selectLine).toHaveBeenCalledWith(
             expect.objectContaining({ state: expect.any(Object) }),
-            2
+            110
         );
     });
 });

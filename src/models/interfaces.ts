@@ -17,6 +17,6 @@ export interface StateInterface {
     selectedLineStops: StopInterface[];
     selectedLineNumber: number | null;
     selectedStop: SelectedStopInterface;
-    isLoading: boolean;
-    error: string | null;
+    isLoading?: boolean;
+    error?: string | null;
 }

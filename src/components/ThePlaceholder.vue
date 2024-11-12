@@ -10,7 +10,7 @@
         <TimesList
             v-else-if="type === 'times' && content.length && isSelectedStop"
             :times="content"
-            :selected-stop="{ name: selectedStop.name, order: selectedStop.order }"
+            :selected-stop="{ name: selectedStop.name ?? '', order: selectedStop.order ?? 0 }"
         />
         <div v-else class="placeholder__label">{{ label }}</div>
     </BaseCard>
@@ -27,14 +27,17 @@ const props = defineProps<{ type: 'stops' | 'times' }>();
 
 const { activeStops, activeTimes, selectedLineNumber, selectedStop } = useMainStore();
 
+// Check if the selected stop is valid (not null)
 const isSelectedStop = computed(() => {
     return selectedStop.value.name !== null && selectedStop.value.order !== null;
 });
 
+// Determining content based on type (stops or times)
 const content = computed(() => {
     return props.type === 'stops' ? activeStops.value : activeTimes.value;
 });
 
+// Determining the label based on condition and type
 const label = computed(() => {
     if (props.type === 'stops' && !selectedLineNumber.value) {
         return 'Please select the bus line first';

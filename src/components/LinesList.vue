@@ -5,7 +5,7 @@
         </template>
         <div class="bus-lines-list">
             <div
-                v-for="line in allLines"
+                v-for="line in sortedLines"
                 :key="line"
                 class="bus-lines-list__item"
                 :class="{ active: line === selectedLineNumber }"
@@ -21,7 +21,7 @@
 import { useMainStore } from '@/composables/useMainStore';
 import BaseCard from '@/components/ui/BaseCard.vue';
 
-const { allLines, selectedLineNumber, selectLine } = useMainStore();
+const { sortedLines, selectedLineNumber, selectLine } = useMainStore();
 </script>
 
 <style lang="scss" scoped>

@@ -1,6 +1,7 @@
-import { createStore } from 'vuex';
 import axios from 'axios';
+import { createStore } from 'vuex';
 import { StateInterface, StopInterface } from '@/models/interfaces';
+import { Endpoints } from '@/models/endpoints';
 
 export default createStore<StateInterface>({
     state: {
@@ -13,7 +14,7 @@ export default createStore<StateInterface>({
         error: null
     },
     getters: {
-        allLines(state): number[] {
+        sortedLines(state): number[] {
             return [...new Set(state.lines)].sort((a, b) => a - b);
         },
         activeStops(state): StopInterface[] {
@@ -41,10 +42,10 @@ export default createStore<StateInterface>({
             return times;
         },
         isLoading(state): boolean {
-            return state.isLoading;
+            return state.isLoading ?? false;
         },
         error(state): string | null {
-            return state.error;
+            return state.error ?? null;
         }
     },
     mutations: {
@@ -86,7 +87,7 @@ export default createStore<StateInterface>({
             commit('setError', null);
 
             try {
-                const response = await axios.get<StopInterface[]>('http://localhost:3000/stops');
+                const response = await axios.get<StopInterface[]>(Endpoints.API_URL);
                 const stopsData = response.data;
                 const lines = [...new Set(stopsData.map((stop) => stop.line))];
                 commit('setLines', lines);

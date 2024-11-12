@@ -7,10 +7,10 @@ import { StopType } from '@/models/types';
 import { nextTick } from 'vue';
 import { useLists } from '@/composables/useLists';
 
+// Store mockup with sample data
 const mockStore = {
     state: {
-        selectedLineNumber: 101,
-        selectedStop: { name: null, order: null }
+        selectedLineNumber: 101
     },
     actions: {
         selectStop: jest.fn()

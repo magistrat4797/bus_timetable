@@ -7,15 +7,14 @@ import { createStore, Store } from 'vuex';
 import { StateInterface } from '@/models/interfaces';
 import { nextTick } from 'vue';
 
+// Store mockup with sample data
 const mockStore = {
     state: {
         lines: [],
         stops: [],
         selectedLineStops: [],
         selectedLineNumber: null,
-        selectedStop: { name: null, order: null, times: [] },
-        isLoading: false,
-        error: null
+        selectedStop: { name: null, order: null, times: [] }
     },
     getters: {
         activeStops: () => [
@@ -24,12 +23,7 @@ const mockStore = {
             { stop: 'Malczewskiego', order: 7, line: 101 },
             { stop: 'Szwedzka', order: 4, line: 101 }
         ],
-        activeTimes: () => ['7:00', '8:00', '9:00', '10:00'],
-        isLoading: () => false,
-        error: () => null
-    },
-    actions: {
-        selectStop: jest.fn()
+        activeTimes: () => ['7:00', '8:00', '9:00', '10:00']
     }
 };
 
@@ -152,6 +146,7 @@ describe('ThePlaceholder.vue', () => {
                 selectedLineNumber: null
             },
             getters: {
+                // Set empty activeStops array for testing
                 activeStops: () => []
             }
         };

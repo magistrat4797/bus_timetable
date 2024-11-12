@@ -10,5 +10,6 @@ module.exports = {
     transformIgnorePatterns: ['/node_modules/'],
     moduleNameMapper: {
         '^@/(.*)$': '<rootDir>/src/$1'
-    }
+    },
+    testMatch: ['**/src/**/*.spec.[jt]s', '**/__tests__/**/*.[jt]s']
 };

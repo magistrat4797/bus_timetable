@@ -7,12 +7,12 @@ export function useMainStore() {
 
     // States
     const selectedLineNumber = computed(() => store.state.selectedLineNumber);
-    const selectedStop = computed(() => store.state.selectedStop); // Teraz selectedStop zawiera także 'times'
+    const selectedStop = computed(() => store.state.selectedStop);
     const isLoading = computed(() => store.state.isLoading);
     const error = computed(() => store.state.error);
 
     // Getters
-    const allLines = computed(() => store.getters.allLines);
+    const sortedLines = computed(() => store.getters.sortedLines);
     const allStops = computed(() => store.state.stops);
     const activeStops = computed(() => store.getters.activeStops);
     const activeTimes = computed(() => store.getters.activeTimes);
@@ -35,7 +35,7 @@ export function useMainStore() {
     };
 
     return {
-        allLines,
+        sortedLines,
         allStops,
         selectedLineNumber,
         selectedStop,
