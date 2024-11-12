@@ -12,6 +12,7 @@
                     class="nav-link whitespace-nowrap"
                     active-class="active"
                     @click="setIndicatorPosition"
+                    :title="link.label"
                 >
                     {{ link.label }}
                 </RouterLink>
