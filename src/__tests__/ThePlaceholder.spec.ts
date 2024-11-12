@@ -1,4 +1,4 @@
-import { mount, VueWrapper } from '@vue/test-utils';
+import { mount, VueWrapper, DOMWrapper } from '@vue/test-utils';
 import ThePlaceholder from '@/components/ThePlaceholder.vue';
 import BaseCard from '@/components/ui/BaseCard.vue';
 import StopsList from '@/components/StopsList.vue';
@@ -12,7 +12,7 @@ const mockStore = {
         lines: [],
         stops: [],
         selectedLineStops: [],
-        selectedLineNumber: 101,
+        selectedLineNumber: null,
         selectedStop: { name: null, order: null, times: [] },
         isLoading: false,
         error: null
@@ -91,7 +91,7 @@ describe('ThePlaceholder.vue', () => {
         store.state.selectedStop = {
             name: 'Kapelanka',
             order: 5,
-            times: ['7:00', '8:00', '9:00', '10:00']
+            times: ['9:00', '8:00', '7:00', '10:00']
         };
         await wrapper.setProps({ type: 'times' });
 
@@ -103,17 +103,19 @@ describe('ThePlaceholder.vue', () => {
     });
 
     it('renders correct label for different conditions', async () => {
+        let label: DOMWrapper<Element>;
+
         // Case 1: No line selected (for type 'times')
         store.state.selectedLineNumber = null;
         store.state.selectedStop = { name: null, order: null, times: [] };
         await wrapper.setProps({ type: 'times' });
         await nextTick();
 
-        let label = wrapper.find('.placeholder__label');
+        label = wrapper.find('.placeholder__label');
         expect(label.exists()).toBe(true);
         expect(label.text()).toBe('Please select the bus line first');
 
-        // Case 2: Line selected, but no stop selected (for type 'times')
+        // Case 2: Line selected, stop not selected (for type 'times')
         store.state.selectedLineNumber = 101;
         store.state.selectedStop = { name: null, order: null, times: [] };
         await wrapper.setProps({ type: 'times' });
@@ -124,7 +126,12 @@ describe('ThePlaceholder.vue', () => {
         expect(label.text()).toBe('Please select the bus stop first');
 
         // Case 3: Line and stop selected (for type 'times')
-        store.state.selectedStop = { name: 'Kapelanka', order: 5, times: ['7:00', '8:00'] };
+        store.state.selectedLineNumber = 101;
+        store.state.selectedStop = {
+            name: 'Kapelanka',
+            order: 5,
+            times: ['9:00', '8:00', '7:00', '10:00']
+        };
         await wrapper.setProps({ type: 'times' });
         await nextTick();
 
@@ -138,19 +145,34 @@ describe('ThePlaceholder.vue', () => {
 
         label = wrapper.find('.placeholder__label');
         expect(label.exists()).toBe(false);
+
+        // Case 5: Line not selected (for both types)
+        const mockStore = {
+            state: {
+                selectedLineNumber: null
+            },
+            getters: {
+                activeStops: () => []
+            }
+        };
+        store = createStore(mockStore) as Store<StateInterface>;
+
+        wrapper = mount(ThePlaceholder, {
+            props: {
+                type: 'stops'
+            },
+            global: {
+                plugins: [store],
+                components: { BaseCard, StopsList, TimesList }
+            }
+        });
+        await nextTick();
+
+        label = wrapper.find('.placeholder__label');
+
+        expect(label.exists()).toBe(true);
+        expect(label.text()).toBe('Please select the bus line first');
     });
-
-    // it('renders correct label for "stops" type with no line selected', async () => {
-    //     store.state.selectedLineNumber = null;
-    //     await wrapper.setProps({ type: 'stops' });
-
-    //     await nextTick();
-
-    //     const label = wrapper.find('.placeholder__label');
-
-    //     expect(label.exists()).toBe(true);
-    //     expect(label.text()).toBe('Please select the bus line first');
-    // });
 
     it('displays times in ascending order by default for type="times"', async () => {
         store.state.selectedLineNumber = 101;
